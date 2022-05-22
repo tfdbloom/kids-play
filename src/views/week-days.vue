@@ -1,13 +1,13 @@
 <template>
   <div :class="['page-container', cModifiers, { 'page-container--has-error': showErrorsMessage, 'page-container--has-success': showSuccessMessage }]">
     <div class="page-actions">
+      <button class="m-button reset-play" @click="reset">
+        Börja om
+      </button>
+
       <div class="error-count">
         {{ errorCount }} / 3
       </div>
-
-      <!-- <button class="m-button" @click="reset">
-        Börja om
-      </button> -->
     </div>
 
     <ul v-if="days && days.length" class="m-list days-list">
@@ -144,8 +144,8 @@ export default {
 }
 
 .page-actions {
+  position: relative;
   display: flex;
-  justify-content: center;
 }
 
 .block {
@@ -163,6 +163,7 @@ export default {
   background-color: #232323;
   color: white;
   border-radius: .3rem;
+  font-size: 1.6rem;
 }
 
 /* list */
@@ -226,10 +227,14 @@ export default {
 }
 
 .error-count {
+  position: absolute;
+  top: 50%;
+  left: 50%;
   display: flex;
   padding: 1rem;
   background-color: #f5dc09;
   font-size: 2rem;
   font-weight: bold;
+  transform: translate(-50%, -50%);
 }
 </style>
