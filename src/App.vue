@@ -29,7 +29,7 @@ html {
 
 body {
   font-family: Arial, Helvetica, sans-serif;
-  padding: 3rem;
   font-size: 1.6rem;
+  background-color: #f8f8f8;
 }
 </style>

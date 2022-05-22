@@ -1,25 +1,29 @@
 <template>
   <div :class="['page-container', cModifiers, { 'page-container--has-error': showErrorsMessage, 'page-container--has-success': showSuccessMessage }]">
-    <button class="m-button" @click="reset">
-      Återställ
-    </button>
+    <div class="page-actions">
+      <div class="error-count">
+        {{ errorCount }} / 3
+      </div>
 
-    <div class="error-count">
-      {{ errorCount }} / 3
+      <!-- <button class="m-button" @click="reset">
+        Börja om
+      </button> -->
     </div>
 
     <ul v-if="days && days.length" class="m-list days-list">
       <li v-for="day in days" :key="day.i">
-        <button :class="['m-card m-card--small', { 'm-card--is-selected': day.i < selectedCount }]" @click="selectDay(day)">
+        <button class="m-button--day" :disabled="day.i < selectedCount" @click="selectDay(day)">
           {{ day.name }}
         </button>
       </li>
     </ul>
 
-    <ul class="m-list days-list">
-      <li v-for="day of selected" :key="day.i" class="m-card m-card--selected">
-        <div>{{ day.name }}</div>
-        <div>{{ day.i }}</div>
+    <ul class="m-list days-correct-list">
+      <li v-for="i of 7" :key="i" class="days-correct-list__item">
+        <template v-if="selected.find(d => d.i === i)">
+          <span>{{ i }}</span>
+          <span>{{ getDayName(i) }}</span>
+        </template>
       </li>
     </ul>
   </div>
@@ -78,6 +82,11 @@ export default {
       state.errors = []
     }
 
+    function getDayName (index) {
+      const day = state.selected.find(d => d.i === index)
+      return day.name ?? null
+    }
+
     const playSounds = (type) => {
       const sound = new Audio(type)
       sound.play()
@@ -96,30 +105,31 @@ export default {
       selectDay,
       reset,
       selectedCount,
-      errorCount
+      errorCount,
+      getDayName
     }
   }
 }
 </script>
 
 <style lang="scss">
+/* page container */
 .page-container {
   position: relative;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
+  display: grid;
   gap: 5rem;
+  padding: 2rem;
 }
 
 .page-container::after {
   content: '👎';
   position: absolute;
   top: 0;
-  left: 50%;
+  right: 0;
   padding: 2rem;
   border-radius: .6rem;
-  background-color: black;
-  font-size: 10rem;
+  background-color: #111;
+  font-size: 3rem;
   transform: translate(-50%, 0);
   line-height: 1;
   opacity: 0;
@@ -133,10 +143,17 @@ export default {
   visibility: visible;
 }
 
+.page-actions {
+  display: flex;
+  justify-content: center;
+}
+
 .block {
   padding: 2rem;
   background-color: #ededed;
 }
+
+/* button */
 
 .m-button {
   min-width: 10rem;
@@ -148,26 +165,32 @@ export default {
   border-radius: .3rem;
 }
 
+/* list */
+
 .m-list {
   list-style-type: none;
   margin: 0;
   padding: 0;
 }
 
+/* day list */
+
 .days-list {
   display: grid;
-  grid-template-columns: repeat(7, 1fr);
+  grid-template-columns: repeat(auto-fill, minmax(18rem, 1fr));
   gap: 1rem;
   width: 100%;
 }
 
-.m-card {
+/* day button */
+
+.m-button--day {
   width: 100%;
   min-height: 10rem;
   padding: 1rem 1.5rem;
-  background-color: #039bf3;
+  background-color: #0a1e37;
   color: white;
-  border-radius: .3rem;
+  border-radius: .6rem;
   font-size: 2.6rem;
   font-weight: 600;
   letter-spacing: .1rem;
@@ -175,28 +198,37 @@ export default {
   text-transform: uppercase;
 }
 
-.m-card:not(.m-card--selected):not(.m-card--is-selected):hover {
+.m-button--day:hover {
   cursor: pointer;
-  background-color: #028fe0;
 }
 
-.m-card--is-selected {
-  background-color: #a8d4ee;
+.m-button--day:disabled {
+  background-color: #1e5ba6;
 }
 
-.m-card--selected {
-  background-color: #ededed;
-  color: #111;
+.days-correct-list {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.days-correct-list__item {
   display: flex;
   align-items: center;
-  flex-direction: column;
-}
-
-.m-card--selected > *:last-child {
-  font-size: 2rem;
+  justify-content: center;
+  gap: .5rem;
+  height: 6rem;
+  padding: 1.5rem;
+  background-color: #ccc;
+  color: #111;
+  font-size: 1.8rem;
+  border-radius: .3rem;
 }
 
 .error-count {
+  display: flex;
+  padding: 1rem;
+  background-color: #f5dc09;
   font-size: 2rem;
   font-weight: bold;
 }
