@@ -1,7 +1,7 @@
 <template>
   <div :class="['page-container', cModifiers, { 'page-container--has-error': showErrorsMessage, 'page-container--has-success': showSuccessMessage }]">
     <div class="page-actions">
-      <button class="m-button reset-play" @click="reset">
+      <button class="m-button m-button--dark-temp" @click="reset">
         Börja om
       </button>
 
@@ -145,7 +145,8 @@ export default {
 
 .page-actions {
   position: relative;
-  display: flex;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
 }
 
 .block {
@@ -164,6 +165,10 @@ export default {
   color: white;
   border-radius: .3rem;
   font-size: 1.6rem;
+}
+
+.m-button--dark-temp {
+  justify-self: start;
 }
 
 /* list */
@@ -227,14 +232,11 @@ export default {
 }
 
 .error-count {
-  position: absolute;
-  top: 50%;
-  left: 50%;
+  place-self: center;
   display: flex;
   padding: 1rem;
   background-color: #f5dc09;
   font-size: 2rem;
   font-weight: bold;
-  transform: translate(-50%, -50%);
-}
+  }
 </style>
