@@ -1,5 +1,5 @@
 <template>
-  <nav>
+  <nav class="site-nav">
     <router-link to="weekdays">
       Week days
     </router-link>
@@ -31,5 +31,9 @@ body {
   font-family: Arial, Helvetica, sans-serif;
   font-size: 1.6rem;
   background-color: #f8f8f8;
+}
+
+.site-nav {
+  padding: .25rem;
 }
 </style>
